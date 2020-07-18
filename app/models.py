@@ -24,9 +24,14 @@ class ProductImages(models.Model):
 
 class Providers(models.Model):
     vendor_code = models.CharField('vendor code', max_length=50)
-    provider = models.CharField('vendor code', max_length= 50)
+    provider = models.CharField('Provider name', max_length= 50)
     price = models.DecimalField('price', max_digits=9, decimal_places=2)
     availability = models.BooleanField(default=False)
 
     def __str__(self):
-        return (self.vendor_code, self.provider, self.price, self.availability)
+        return '"{0}" ({1}) {2}$'.format(self.provider, self.vendor_code, self.price)
+        # return [self.vendor_code, self.provider, self.price, self.availability]
+
+    class Meta:
+        verbose_name = 'Provider'
+        verbose_name_plural = 'Providers'

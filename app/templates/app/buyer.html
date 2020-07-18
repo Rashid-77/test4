@@ -1,0 +1,29 @@
+{% extends 'app/base.html' %}
+
+{% block title %}
+Buyer page
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <h5>Раздел для покупателей</h5>
+    <table border="1" width="500" height="15" align="left" cellpadding="2">
+        <tr>
+            <td>Product</td>
+            <td>vendor code</td>
+            <td>price</td>
+            <td>provider</td>
+            <td>Picture</td>
+        </tr>
+        {% for i in prod_table %}
+        <tr>
+            <td></td>
+            <td>{{ i.vendor_code }}</td>
+            <td>{{ i.price }}</td>
+            <td>{{ i.provider }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
