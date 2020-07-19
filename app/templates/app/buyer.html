@@ -7,21 +7,26 @@ Buyer page
 
 {% block content %}
 <div class="container">
-    <h5>Раздел для покупателей</h5>
+    <h5>Available products</h5>
     <table border="1" width="500" height="15" align="left" cellpadding="2">
-        <tr>
+        <tr align="center">
             <td>Product</td>
             <td>vendor code</td>
             <td>price</td>
             <td>provider</td>
             <td>Picture</td>
         </tr>
-        {% for i in prod_table %}
-        <tr>
-            <td></td>
-            <td>{{ i.vendor_code }}</td>
+        {% for i in available_product %}
+        <tr align="center">
+            {% for p in prod_table %}
+                {% if p == i.vendor_code %}
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.vendor_code }}</td>
+                {% endif %}
+            {% endfor %}
             <td>{{ i.price }}</td>
             <td>{{ i.provider }}</td>
+            <td>no_pict</td>
         </tr>
         {% endfor %}
     </table>
