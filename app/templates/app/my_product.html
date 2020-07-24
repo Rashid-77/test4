@@ -1,24 +1,27 @@
 {% extends 'app/base.html' %}
 
 {% block title %}
-Buyer page
+Provider`s page
 {% endblock %}
-
 
 {% block content %}
 <div class="container">
-    <h5>Раздел для поставщиков</h5>
+    <h5>My products</h5>
     <table border="1" width="500" height="15" align="left" cellpadding="2">
-        <tr>
-            <td>Provider</td>
-            <td>vendor code</td>
-            <td>price</td>
+        <tr align="center">
+            <td>Product name</td>
+            <td>Vendor code</td>
+            <td>Price</td>
             <td>Availability</td>
             <td>Picture</td>
         </tr>
-        {% for i in prov_table %}
-        <tr>
-            <td>{{ i.provider }}</td>
+        {% for i in my_products %}
+        <tr align="center">
+            {% for p in products %}
+                {% if p == i.vendor_code %}
+                    <td>{{ p.name }}</td>
+                {% endif %}
+            {% endfor %}
             <td>{{ i.vendor_code }}</td>
             <td>{{ i.price }}</td>
             <td>{{ i.availability }}</td>
@@ -26,7 +29,6 @@ Buyer page
         </tr>
         {% endfor %}
     </table>
-
 </div>
 
 {% endblock %}

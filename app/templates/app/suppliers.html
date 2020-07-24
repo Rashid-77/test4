@@ -1,0 +1,32 @@
+{% extends 'app/base.html' %}
+
+{% block title %}
+Provider`s page
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h5>Cheaper products of competitors</h5>
+    <table border="1" width="500" height="15" align="left" cellpadding="2">
+        <tr align="center">
+            <td>Product name</td>
+            <td>Vendor code</td>
+            <td>Price</td>
+            <td>Supplier</td>
+        </tr>
+        {% for i in cheaper_products %}
+        <tr align="center">
+            {% for p in products %}
+                {% if p == i.vendor_code %}
+                    <td>{{ p.name }}</td>
+                {% endif %}
+            {% endfor %}
+            <td>{{ i.vendor_code }}</td>
+            <td>{{ i.price }}</td>
+            <td>{{ i.provider }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

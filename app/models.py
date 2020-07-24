@@ -3,13 +3,9 @@
 from django.db import models
 
 
-
-class Product (models.Model):
+class Product(models.Model):
     name = models.CharField('product_name', max_length=50)
     vendor_code = models.CharField('vendor code', default=None, max_length=50)
-    price = models.DecimalField('price', default=None, max_digits=11, decimal_places=2)
-    provider = models.ForeignKey('Providers', default=None, on_delete=models.CASCADE)
-    availability = models.BooleanField(default=False)
 
     def __str__(self):
         return '{0}'.format(self.vendor_code)
@@ -27,15 +23,11 @@ class ProductImages(models.Model):
 
 class Providers(models.Model):
     name = models.CharField('Provider name', default='', max_length=50)
-    vendor_code = models.ForeignKey(Product, default=None, on_delete=models.CASCADE)
     telephone = models.CharField('Telephone', default=None, max_length=12)
     zip_code = models.CharField('zip code', default=None, max_length=6)
-    # vendor_code = models.CharField('vendor code', max_length=50)
 
     def __str__(self):
-        return '{0}'.format(self.provider)
-        # return '"{0}" {1}$'.format(self.provider, self.price)
-        # return '{0}-"{1}" {2}$, {3}'.format(self.vendor_code, self.provider, self.price, self.availability)
+        return '{0}'.format(self.name)
 
     class Meta:
         verbose_name = 'Provider'
@@ -45,6 +37,8 @@ class Providers(models.Model):
 class ProviderProduct(models.Model):
     provider = models.ForeignKey(Providers, default=None, on_delete=models.CASCADE)
     vendor_code = models.ForeignKey(Product, default=None, on_delete=models.CASCADE)
+    price = models.DecimalField('price', default=None, max_digits=11, decimal_places=2)
+    availability = models.BooleanField(default=False)
 
     def __str__(self):
-        return '{0} - {1}'.format(self.provider, self.vendor_code)
+        return '{0} - {1} {2}$, {3}'.format(self.provider, self.vendor_code, self.price, self.availability)
