@@ -6,7 +6,7 @@ Buyer page
 
 {% block content %}
 <div class="container">
-    <h5>All products</h5>
+    <h5>Avaliable products</h5>
     <table border="1" width="500" height="15" align="left" cellpadding="2">
         <tr align="center">
             <td>Product</td>
@@ -23,8 +23,8 @@ Buyer page
                     <td>{{ p.vendor_code }}</td>
                 {% endif %}
             {% endfor %}
-            <td>{{ i.price }}</td>
-            <td>{{ i.provider }}</td>
+            <td>{{ i.product_price }}</td>
+            <td>{{ i.supplier_name }}</td>
             <td>no_pict</td>
         </tr>
         {% endfor %}

@@ -21,7 +21,7 @@ class ProductImages(models.Model):
         return '({0}) {1}'.format(self.vendor_code, self.image_path)
 
 
-class Providers(models.Model):
+class Supplier(models.Model):
     name = models.CharField('Provider name', default='', max_length=50)
     telephone = models.CharField('Telephone', default=None, max_length=12)
     zip_code = models.CharField('zip code', default=None, max_length=6)
@@ -30,15 +30,15 @@ class Providers(models.Model):
         return '{0}'.format(self.name)
 
     class Meta:
-        verbose_name = 'Provider'
-        verbose_name_plural = 'Providers'
+        verbose_name = 'Supplier'
+        verbose_name_plural = 'Suppliers'
 
 
-class ProviderProduct(models.Model):
-    provider = models.ForeignKey(Providers, default=None, on_delete=models.CASCADE)
+class SupplierProduct(models.Model):
+    supplier_name = models.ForeignKey(Supplier, default=None, on_delete=models.CASCADE)
     vendor_code = models.ForeignKey(Product, default=None, on_delete=models.CASCADE)
-    price = models.DecimalField('price', default=None, max_digits=11, decimal_places=2)
+    product_price = models.DecimalField('Price', default=None, max_digits=11, decimal_places=2)
     availability = models.BooleanField(default=False)
 
     def __str__(self):
-        return '{0} - {1} {2}$, {3}'.format(self.provider, self.vendor_code, self.price, self.availability)
+        return '{0} - {1} {2}$, {3}'.format(self.supplier_name, self.vendor_code, self.product_price, self.availability)
