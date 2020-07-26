@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path        # django 2.0 doesn't support this
+# from django.conf.urls import url
 from . import views
 
 
@@ -8,5 +9,5 @@ urlpatterns = [
     path('suppliers', views.suppliers, name='suppliers'),
     path('my_product', views.my_product, name='my_product'),
     path('buyer', views.buyer, name='buyer'),
-    path('login', views.login, name='login')
+    path('login', views.login_view, name="login"),
 ]

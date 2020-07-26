@@ -1,5 +1,6 @@
-from django.shortcuts import render
-# from django.contrib.auth import models.user
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login
 from .models import Product, SupplierProduct, ProductImages
 
 
@@ -39,6 +40,7 @@ def suppliers(request):
 
 
 def buyer(request):
+    print('hello')
     available_product = SupplierProduct.objects.filter(availability__exact='True')
     available_product = available_product.order_by('vendor_code', 'product_price')
     prod_table = Product.objects.all()
@@ -53,8 +55,17 @@ def buyer(request):
     return render(request, 'app/buyer.html', {'available_product': available_product, 'prod_table': prod_table, 'user':user})
 
 
-def login(request):
-    return render(request, 'app/login.html')
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('my_product')
+    else:
+        form = AuthenticationForm()
+    print(type(form))
+    return render(request, 'login.html', {'form': form})
 
 
 def get_db_data():
