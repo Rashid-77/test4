@@ -5,7 +5,7 @@ Provider`s page
 {% endblock %}
 
 {% block links %}
-    <a class="p-2 text-dark" href="/suppliers">Suppliers</a>
+    <a class="p-2 text-dark" href="/suppliers">Cheaper products</a>
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,7 @@ Provider`s page
             <td>Product name</td>
             <td>Vendor code</td>
             <td>Price</td>
-            <td>Availability</td>
+            <td>In stock</td>
             <td>Picture</td>
         </tr>
         {% for i in my_products %}
@@ -28,8 +28,20 @@ Provider`s page
             {% endfor %}
             <td>{{ i.vendor_code }}</td>
             <td>{{ i.product_price }}</td>
-            <td>{{ i.availability }}</td>
-            <td>no_pict</td>
+            {% if i.availability %}
+                <td>yes</td>
+            {% else %}
+                <td>no</td>
+            {% endif %}
+            {% for img in img_table %}
+                {% if img.vendor_code == i.vendor_code %}
+                    {% if img.image_path == 'no_image_available-1.png' %}
+                        <td>no</td>
+                    {% else %}
+                        <td>yes</td>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
         </tr>
         {% endfor %}
     </table>

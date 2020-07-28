@@ -9,16 +9,14 @@ class Product(models.Model):
 
     def __str__(self):
         return '{0}'.format(self.vendor_code)
-        # return '{0} {1}'.format(self.name, self.vendor_code)
 
 
 class ProductImages(models.Model):
     vendor_code = models.ForeignKey(Product, default=None, on_delete=models.CASCADE)
-    image_path = models.TextField('img_path', max_length=200)
-    # image_path = models.FilePathField()
+    image_path = models.ImageField(default='no_image_available-1.png', blank=True)
 
     def __str__(self):
-        return '({0}) {1}'.format(self.vendor_code, self.image_path)
+        return '{0}'.format(self.vendor_code)
 
 
 class Supplier(models.Model):

@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotFound
 from .models import Product, SupplierProduct, ProductImages
+from django.db.models import Q
 
 
 def index(request):
@@ -20,6 +21,15 @@ def index(request):
     return render(request, 'app/index.html')
 
 
+def get_thumb_images():
+    img_table = ProductImages.objects.filter(
+        Q(image_path__endswith='-1.jpg') \
+        | Q(image_path__endswith='-1.jpeg') \
+        | Q(image_path__endswith='-1.png')
+    )
+    return img_table
+
+
 @login_required
 def my_product(request):
     user = request.user
@@ -32,7 +42,9 @@ def my_product(request):
                 my_products.append(i)
 
         products = Product.objects.all().order_by('vendor_code')
-        return render(request, 'app/my_product.html', {'my_products': my_products, 'products': products})
+        img_table = get_thumb_images()
+        dataset = {'my_products': my_products, 'products': products, 'img_table': img_table}
+        return render(request, 'app/my_product.html', dataset)
     else:
         return HttpResponseNotFound('<h1>Forbidden.</h1><p>You don`t have permission to access</p>')
 
@@ -63,7 +75,9 @@ def buyer(request):
         available_product = SupplierProduct.objects.filter(availability__exact='True')
         available_product = available_product.order_by('vendor_code', 'product_price')
         prod_table = Product.objects.all()
-        return render(request, 'app/buyer.html', {'available_product': available_product, 'prod_table': prod_table})
+        img_table = get_thumb_images()
+        dataset = {'available_product': available_product, 'prod_table': prod_table, 'img_table': img_table}
+        return render(request, 'app/buyer.html', dataset)
     else:
         return HttpResponseNotFound('<h1>Forbidden.</h1><p>You don`t have permission to access</p>')
 
@@ -79,5 +93,3 @@ def login_view(request):
         form = AuthenticationForm()
 
     return render(request, 'login.html', {'form': form})
-
-

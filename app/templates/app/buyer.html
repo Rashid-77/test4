@@ -28,7 +28,11 @@ Buyer page
             {% endfor %}
             <td>{{ i.product_price }}</td>
             <td>{{ i.supplier_name }}</td>
-            <td>no_pict</td>
+            {% for img in img_table %}
+                {% if img.vendor_code == i.vendor_code %}
+                <td><img src="{{img.image_path.url}}" width="50"></td>
+                {% endif %}
+            {% endfor %}
         </tr>
         {% endfor %}
     </table>
