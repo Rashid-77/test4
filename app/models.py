@@ -25,7 +25,7 @@ class Supplier(models.Model):
     zip_code = models.CharField('zip code', default=None, max_length=6)
 
     def __str__(self):
-        return '{0}'.format(self.name)
+        return self.name
 
     class Meta:
         verbose_name = 'Supplier'

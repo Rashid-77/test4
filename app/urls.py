@@ -11,5 +11,4 @@ urlpatterns = [
     path('my_product', views.my_product, name='my_product'),
     path('buyer', views.buyer, name='buyer'),
     path('login', views.login_view, name='login'),
-    path('admin', admin.site.urls, name='admin')
 ]
