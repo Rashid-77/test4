@@ -17,7 +17,7 @@
             </nav>
 
             {% if user.is_authenticated %}
-            <div>User: {{ user.get_username }} </div>
+            <div>Hello {{ user.get_username }} </div>
                 <a class="btn btn-outline-primary" href="{% url 'logout'%}">Logout</a>
             {% else %}
                 <a class="btn btn-outline-primary" href="{% url 'login'%}">Login</a>
