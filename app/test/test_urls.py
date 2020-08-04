@@ -1,24 +1,22 @@
-import unittest
-from app.models import Product, ProductImages, Supplier, SupplierProduct
-from django.test import Client
-
-class MyTestCase(unittest.TestCase):
-    def test_correct_supplier_product_created(self):
-        self.p = Product.objects.create(name='metall_plate', vendor_code='P6')
-        self.assertEqual(str(self.p), 'P6')
-
-        self.s = Supplier.objects.create(name='nonsense', telephone='+198244205', zip_code='234234')
-        self.assertEqual(str(self.s), 'nonsense')
-
-        self.sp = SupplierProduct.objects.create(
-            supplier_name=self.s,
-            vendor_code=self.p,
-            product_price=12.7,
-            availability=True
-        )
-        self.assertEqual(str(self.sp), 'nonsense - P6 12.7$, True')
+from django.test import SimpleTestCase
+from django.urls import reverse, resolve
+from app.views import user_dispather, my_product, suppliers, buyer, login_view
 
 
+class TestUrls(SimpleTestCase):
 
-if __name__ == '__main__':
-    unittest.main()
+    def test_buyer_url_is_resolved(self):
+        url = reverse('buyer')
+        self.assertEqual(resolve(url).func, buyer)
+
+    def test_my_product_url_is_resolved(self):
+        url = reverse('my_product')
+        self.assertEqual(resolve(url).func, my_product)
+
+    def test_suppliers_url_is_resolved(self):
+        url = reverse('suppliers')
+        self.assertEqual(resolve(url).func, suppliers)
+
+    def test_home_url_is_resolved(self):
+        url = reverse('home')
+        self.assertEqual(resolve(url).func, user_dispather)
