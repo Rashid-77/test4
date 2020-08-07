@@ -85,11 +85,11 @@ def buyer(request):
     '''
     user = request.user
     if user.groups.filter(name='Buyers').exists():
-        available_product = SupplierProduct.objects.filter(availability__exact='True')
-        available_product = available_product.order_by('product', 'product_price')
-        prod_table = Product.objects.all()
         img_table = get_main_thumb_images()
-        dataset = {'available_product': available_product, 'prod_table': prod_table, 'img_table': img_table}
+        available_product = SupplierProduct.objects.filter(availability__exact='True').\
+            order_by('product', 'product_price').\
+            values('product__name', 'product__product', 'product_price', 'supplier__name')
+        dataset = {'available_product': available_product, 'img_table': img_table}
         return render(request, 'app/buyer.html', dataset)
     else:
         return HttpResponseNotFound('<h1>Forbidden.</h1><p>You don`t have permission to access</p>')

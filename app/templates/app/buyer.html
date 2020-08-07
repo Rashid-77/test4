@@ -20,19 +20,11 @@ Buyer page
         </tr>
         {% for i in available_product %}
         <tr align="center">
-            {% for p in prod_table %}
-                {% if p == i.product %}
-                    <td>{{ p.name }}</td>
-                    <td>{{ i.product }}</td>
-                {% endif %}
-            {% endfor %}
+            <td>{{ i.product__name }}</td>
+            <td>{{ i.product__product }}</td>
             <td>{{ i.product_price }}</td>
-            <td>{{ i.supplier }}</td>
-            {% for img in img_table %}
-                {% if img.product == i.product %}
-                <td><img src="{{img.image_path.url}}" width="50"></td>
-                {% endif %}
-            {% endfor %}
+            <td>{{ i.supplier__name }}</td>
+            <td><img src="{{img.image_path.url}}" width="50"></td>
         </tr>
         {% endfor %}
     </table>
