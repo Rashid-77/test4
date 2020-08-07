@@ -46,8 +46,8 @@ def my_product(request):
     '''
     user = request.user
     if user.groups.filter(name='Suppliers').exists():
-        my_products = SupplierProduct.objects.all().filter(supplier_name__name=user).order_by('vendor_code')
-        products = Product.objects.all().order_by('vendor_code')
+        my_products = SupplierProduct.objects.all().filter(supplier__name=user).order_by('product')
+        products = Product.objects.all().order_by('product')
         img_table = get_main_thumb_images()
         dataset = {'my_products': my_products, 'products': products, 'img_table': img_table}
         return render(request, 'app/my_product.html', dataset)
@@ -63,16 +63,16 @@ def suppliers(request):
     user = request.user
     if user.groups.filter(name='Suppliers').exists():
         competitors_product = SupplierProduct.objects.all().filter(availability__exact='True'). \
-                                                            exclude(supplier_name__name=user)
-        my_products = SupplierProduct.objects.all().filter(supplier_name__name=user).order_by('vendor_code')
+                                                            exclude(supplier__name=user)
+        my_products = SupplierProduct.objects.all().filter(supplier__name=user).order_by('product')
 
         cheaper_products = []
         for my in my_products:
             for competitor in competitors_product:
-                if my.vendor_code == competitor.vendor_code and my.product_price >= competitor.product_price:
+                if my.product == competitor.product and my.product_price >= competitor.product_price:
                     cheaper_products.append(competitor)
 
-        products = Product.objects.all().order_by('vendor_code')
+        products = Product.objects.all().order_by('product')
         return render(request, 'app/suppliers.html', {'cheaper_products': cheaper_products, 'products': products})
     else:
         return HttpResponseNotFound('<h1>Forbidden.</h1><p>You don`t have permission to access</p>')
@@ -86,7 +86,7 @@ def buyer(request):
     user = request.user
     if user.groups.filter(name='Buyers').exists():
         available_product = SupplierProduct.objects.filter(availability__exact='True')
-        available_product = available_product.order_by('vendor_code', 'product_price')
+        available_product = available_product.order_by('product', 'product_price')
         prod_table = Product.objects.all()
         img_table = get_main_thumb_images()
         dataset = {'available_product': available_product, 'prod_table': prod_table, 'img_table': img_table}

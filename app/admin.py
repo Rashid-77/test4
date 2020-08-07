@@ -6,15 +6,15 @@ from .models import Product, ProductImages, Supplier, SupplierProduct
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('vendor_code', 'name')
+    list_display = ('product', 'name')
 
 
 class ProductImagesAdmin(admin.ModelAdmin):
-    list_display = ('vendor_code', 'image_path')
+    list_display = ('product', 'image_path')
 
 
 class SupplierProductAdmin(admin.ModelAdmin):
-    list_display = ('supplier_name', 'vendor_code', 'product_price', 'availability')
+    list_display = ('supplier', 'product', 'product_price', 'availability')
 
     def delete_last_msg(self, request):
         '''
@@ -31,9 +31,9 @@ class SupplierProductAdmin(admin.ModelAdmin):
         '''
         For new and editing existing SupplierProduct
         '''
-        this_suppliers_products = SupplierProduct.objects.filter(supplier_name__exact=obj.supplier_name)
+        this_suppliers_products = SupplierProduct.objects.filter(supplier__exact=obj.supplier)
         for sp in this_suppliers_products:
-            if sp.vendor_code == obj.vendor_code:
+            if sp.product == obj.product:
                 return False
         return True
 
@@ -41,9 +41,10 @@ class SupplierProductAdmin(admin.ModelAdmin):
         '''
         Save new product(price) for this supplier if vendor code is unique for this supplier
         '''
+        pass
         msg_dict = {
-            'name': obj.supplier_name,
-            'code': obj.vendor_code,
+            'name': obj.supplier,
+            'code': obj.product,
         }
         if self.is_vendor_code_unique(obj):
             obj.save()
@@ -52,11 +53,11 @@ class SupplierProductAdmin(admin.ModelAdmin):
             self.message_user(request, format_html(msg, **msg_dict), level=messages.ERROR)
         else:
             old = SupplierProduct.objects.get(pk=obj.id)
-            if old.supplier_name != obj.supplier_name or old.vendor_code != obj.vendor_code:
+            if old.supplier != obj.supplier or old.product != obj.product:
                 msg = _('The {name} already has a product with this vendor code "{code}". Try another')
                 self.message_user(request, format_html(msg, **msg_dict), level=messages.ERROR)
             elif old.product_price == obj.product_price:
-                # don`t save to database, save time consumption
+        #         don`t save to database, save time consumption
                 self.message_user(request, _('Nothing have been changed'), level=messages.INFO)
             else:
                 obj.save()

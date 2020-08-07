@@ -21,13 +21,13 @@ Provider`s page
         {% for i in cheaper_products %}
         <tr align="center">
             {% for p in products %}
-                {% if p == i.vendor_code %}
+                {% if p == i.product %}
                     <td>{{ p.name }}</td>
                 {% endif %}
             {% endfor %}
-            <td>{{ i.vendor_code }}</td>
+            <td>{{ i.product }}</td>
             <td>{{ i.product_price }}</td>
-            <td>{{ i.supplier_name }}</td>
+            <td>{{ i.supplier }}</td>
         </tr>
         {% endfor %}
     </table>

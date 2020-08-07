@@ -22,11 +22,11 @@ Provider`s page
         {% for i in my_products %}
         <tr align="center">
             {% for p in products %}
-                {% if p == i.vendor_code %}
+                {% if p == i.product %}
                     <td>{{ p.name }}</td>
                 {% endif %}
             {% endfor %}
-            <td>{{ i.vendor_code }}</td>
+            <td>{{ i.product }}</td>
             <td>{{ i.product_price }}</td>
             {% if i.availability %}
                 <td>yes</td>
@@ -34,7 +34,7 @@ Provider`s page
                 <td>no</td>
             {% endif %}
             {% for img in img_table %}
-                {% if img.vendor_code == i.vendor_code %}
+                {% if img.product == i.product %}
                     {% if img.image_path == 'no_image_available-1.png' %}
                         <td>no</td>
                     {% else %}

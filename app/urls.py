@@ -1,4 +1,4 @@
-from django.urls import path        # django 2.0 doesn't support this
+from django.urls import path, include
 from django.contrib import admin
 from . import views
 
