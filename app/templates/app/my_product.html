@@ -21,12 +21,8 @@ Provider`s page
         </tr>
         {% for i in my_products %}
         <tr align="center">
-            {% for p in products %}
-                {% if p == i.product %}
-                    <td>{{ p.name }}</td>
-                {% endif %}
-            {% endfor %}
-            <td>{{ i.product }}</td>
+            <td>{{ i.product__name }}</td>
+            <td>{{ i.product__product }}</td>
             <td>{{ i.product_price }}</td>
             {% if i.availability %}
                 <td>yes</td>

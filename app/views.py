@@ -46,10 +46,10 @@ def my_product(request):
     '''
     user = request.user
     if user.groups.filter(name='Suppliers').exists():
-        my_products = SupplierProduct.objects.all().filter(supplier__name=user).order_by('product')
-        products = Product.objects.all().order_by('product')
+        my_products = SupplierProduct.objects.all().filter(supplier__name=user).order_by('product'). \
+            values('product__name', 'product__product', 'product_price', 'availability')
         img_table = get_main_thumb_images()
-        dataset = {'my_products': my_products, 'products': products, 'img_table': img_table}
+        dataset = {'my_products': my_products, 'img_table': img_table}
         return render(request, 'app/my_product.html', dataset)
     else:
         return HttpResponseNotFound('<h1>Forbidden.</h1><p>You don`t have permission to access</p>')
