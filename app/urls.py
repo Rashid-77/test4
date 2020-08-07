@@ -9,7 +9,7 @@ urlpatterns = [
     path('suppliers', views.suppliers, name='suppliers'),
     path('my_product', views.my_product, name='my_product'),
     path('buyer', views.buyer, name='buyer'),
-    path('login', views.login_view, name='login'),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 admin.site.site_header = "Bivni Mamonta Admin"

@@ -46,13 +46,7 @@ def my_product(request):
     '''
     user = request.user
     if user.groups.filter(name='Suppliers').exists():
-        all_product = SupplierProduct.objects.all().order_by('vendor_code')
-        my_products = []
-
-        for i in all_product:
-            if str(i.supplier_name) == str(request.user):
-                my_products.append(i)
-
+        my_products = SupplierProduct.objects.all().filter(supplier_name__name=user).order_by('vendor_code')
         products = Product.objects.all().order_by('vendor_code')
         img_table = get_main_thumb_images()
         dataset = {'my_products': my_products, 'products': products, 'img_table': img_table}
@@ -68,7 +62,8 @@ def suppliers(request):
     '''
     user = request.user
     if user.groups.filter(name='Suppliers').exists():
-        competitors_product = SupplierProduct.objects.all().exclude(supplier_name__name=user)
+        competitors_product = SupplierProduct.objects.all().filter(availability__exact='True'). \
+                                                            exclude(supplier_name__name=user)
         my_products = SupplierProduct.objects.all().filter(supplier_name__name=user).order_by('vendor_code')
 
         cheaper_products = []
@@ -98,19 +93,3 @@ def buyer(request):
         return render(request, 'app/buyer.html', dataset)
     else:
         return HttpResponseNotFound('<h1>Forbidden.</h1><p>You don`t have permission to access</p>')
-
-
-def login_view(request):
-    '''
-    Users come here to log in
-    '''
-    if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return
-    else:
-        form = AuthenticationForm()
-
-    return render(request, 'login.html', {'form': form})
