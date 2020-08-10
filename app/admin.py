@@ -2,15 +2,15 @@ from django.contrib import admin
 from django.contrib import messages
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
-from .models import Product, ProductImages, Supplier, SupplierProduct
+from .models import Product, Image, Supplier, SupplierProduct
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('product', 'name')
+    list_display = ('product', 'name', 'image')
 
 
-class ProductImagesAdmin(admin.ModelAdmin):
-    list_display = ('product', 'image_path')
+# class ImagesAdmin(admin.ModelAdmin):
+#     list_display = ('product', 'image_path')
 
 
 class SupplierProductAdmin(admin.ModelAdmin):
@@ -83,6 +83,7 @@ class SupplierProductAdmin(admin.ModelAdmin):
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Supplier)
-admin.site.register(ProductImages, ProductImagesAdmin)
+# admin.site.register(ProductImages, ProductImagesAdmin)
 admin.site.register(SupplierProduct, SupplierProductAdmin)
+admin.site.register(Image)
 

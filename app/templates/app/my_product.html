@@ -29,18 +29,15 @@ Provider`s page
             {% else %}
                 <td>no</td>
             {% endif %}
-            {% for img in img_table %}
-                {% if img.product == i.product %}
-                    {% if img.image_path == 'no_image_available-1.png' %}
-                        <td>no</td>
-                    {% else %}
-                        <td>yes</td>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
+            {% if i.product__image__path == 'no_image_available-1.png' or i.product__image__path == None %}
+                <td>no</td>
+            {% else %}
+                <td>yes</td>
+            {% endif %}
         </tr>
         {% endfor %}
     </table>
 </div>
 
 {% endblock %}
+

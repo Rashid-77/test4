@@ -12,11 +12,11 @@ Buyer page
     <h5>Avaliable products</h5>
     <table border="1" width="500" height="15" align="left" cellpadding="2">
         <tr align="center">
-            <td>Product</td>
+            <td>product</td>
             <td>vendor code</td>
             <td>price</td>
             <td>provider</td>
-            <td>Picture</td>
+            <td>picture</td>
         </tr>
         {% for i in available_product %}
         <tr align="center">
@@ -24,7 +24,13 @@ Buyer page
             <td>{{ i.product__product }}</td>
             <td>{{ i.product_price }}</td>
             <td>{{ i.supplier__name }}</td>
-            <td><img src="{{img.image_path.url}}" width="50"></td>
+            {% if i.product__image__path == None %}
+                <td>no image</td>
+            {% else %}
+                {% load static %}
+                {% get_media_prefix as MEDIA_PREFIX %}
+                <td><img src = "{{ MEDIA_PREFIX }}{{ i.product__image__path }}" width = "50"></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </table>

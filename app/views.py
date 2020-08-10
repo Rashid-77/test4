@@ -4,7 +4,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse
-from .models import Product, SupplierProduct, ProductImages
+from .models import Product, SupplierProduct, Image
 from django.db.models import Q
 
 
@@ -27,18 +27,6 @@ def user_dispather(request):
     return render(request, 'app/index.html')
 
 
-def get_main_thumb_images():
-    '''
-    this are using to make a table for buyers
-    '''
-    img_table = ProductImages.objects.filter(
-        Q(image_path__endswith='-1.jpg') \
-        | Q(image_path__endswith='-1.jpeg') \
-        | Q(image_path__endswith='-1.png')
-    )
-    return img_table
-
-
 @login_required
 def my_product(request):
     '''
@@ -47,9 +35,8 @@ def my_product(request):
     user = request.user
     if user.groups.filter(name='Suppliers').exists():
         my_products = SupplierProduct.objects.all().filter(supplier__name=user).order_by('product'). \
-            values('product__name', 'product__product', 'product_price', 'availability')
-        img_table = get_main_thumb_images()
-        dataset = {'my_products': my_products, 'img_table': img_table}
+            values('product__name', 'product__product', 'product_price', 'availability', 'product__image__path')
+        dataset = {'my_products': my_products}
         return render(request, 'app/my_product.html', dataset)
     else:
         return HttpResponseNotFound('<h1>Forbidden.</h1><p>You don`t have permission to access</p>')
@@ -85,11 +72,10 @@ def buyer(request):
     '''
     user = request.user
     if user.groups.filter(name='Buyers').exists():
-        img_table = get_main_thumb_images()
-        available_product = SupplierProduct.objects.filter(availability__exact='True').\
+         available_product = SupplierProduct.objects.filter(availability__exact='True').\
             order_by('product', 'product_price').\
-            values('product__name', 'product__product', 'product_price', 'supplier__name')
-        dataset = {'available_product': available_product, 'img_table': img_table}
-        return render(request, 'app/buyer.html', dataset)
+            values('product__name', 'product__product', 'product_price', 'supplier__name', 'product__image__path')
+         dataset = {'available_product': available_product}
+         return render(request, 'app/buyer.html', dataset)
     else:
-        return HttpResponseNotFound('<h1>Forbidden.</h1><p>You don`t have permission to access</p>')
+         return HttpResponseNotFound('<h1>Forbidden.</h1><p>You don`t have permission to access</p>')

@@ -1,6 +1,16 @@
 from django.db import models
 
 
+class Image(models.Model):
+    '''
+    Here is product images.
+    '''
+    path = models.ImageField(default='no_image_available-1.png', blank=False)
+
+    def __str__(self):
+        return '{0}'.format(self.path)
+
+
 class Product(models.Model):
     '''
     here we can add main product image, but better place image to another table,
@@ -8,17 +18,7 @@ class Product(models.Model):
     '''
     name = models.CharField('product name', max_length=50)
     product = models.CharField('vendor code', default=None, max_length=50, unique=True)
-
-    def __str__(self):
-        return '{0}'.format(self.product)
-
-
-class ProductImages(models.Model):
-    '''
-    image extension should be jpg, jpeg or png
-    '''
-    product = models.ForeignKey(Product, default=None, on_delete=models.CASCADE)
-    image_path = models.ImageField(default='no_image_available-1.png', blank=True)
+    image = models.ForeignKey(Image, default=None, on_delete=models.SET_DEFAULT, null=True, blank=True)
 
     def __str__(self):
         return '{0}'.format(self.product)
@@ -48,5 +48,4 @@ class SupplierProduct(models.Model):
 
     def __str__(self):
         return '{0}'.format(self.supplier)
-
 
