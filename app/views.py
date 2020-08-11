@@ -35,7 +35,7 @@ def my_product(request):
     user = request.user
     if user.groups.filter(name='Suppliers').exists():
         my_products = SupplierProduct.objects.all().filter(supplier__name=user).order_by('product'). \
-            values('product__name', 'product__product', 'product_price', 'availability', 'product__image__path')
+            values('product__name', 'product__product', 'product_price', 'availability', 'product__main_image')
         dataset = {'my_products': my_products}
         return render(request, 'app/my_product.html', dataset)
     else:
@@ -74,7 +74,7 @@ def buyer(request):
     if user.groups.filter(name='Buyers').exists():
          available_product = SupplierProduct.objects.filter(availability__exact='True').\
             order_by('product', 'product_price').\
-            values('product__name', 'product__product', 'product_price', 'supplier__name', 'product__image__path')
+            values('product__name', 'product__product', 'product_price', 'supplier__name', 'product__main_image')
          dataset = {'available_product': available_product}
          return render(request, 'app/buyer.html', dataset)
     else:

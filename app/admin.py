@@ -6,11 +6,11 @@ from .models import Product, Image, Supplier, SupplierProduct
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('product', 'name', 'image')
+    list_display = ('product', 'name', 'main_image')
 
 
-# class ImagesAdmin(admin.ModelAdmin):
-#     list_display = ('product', 'image_path')
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('path', 'product')
 
 
 class SupplierProductAdmin(admin.ModelAdmin):
@@ -83,7 +83,6 @@ class SupplierProductAdmin(admin.ModelAdmin):
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Supplier)
-# admin.site.register(ProductImages, ProductImagesAdmin)
 admin.site.register(SupplierProduct, SupplierProductAdmin)
-admin.site.register(Image)
+admin.site.register(Image, ImageAdmin)
 

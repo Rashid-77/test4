@@ -24,12 +24,12 @@ Buyer page
             <td>{{ i.product__product }}</td>
             <td>{{ i.product_price }}</td>
             <td>{{ i.supplier__name }}</td>
-            {% if i.product__image__path == None %}
+            {% if i.product__main_image == None %}
                 <td>no image</td>
             {% else %}
                 {% load static %}
                 {% get_media_prefix as MEDIA_PREFIX %}
-                <td><img src = "{{ MEDIA_PREFIX }}{{ i.product__image__path }}" width = "50"></td>
+                <td><img src = "{{ MEDIA_PREFIX }}{{ i.product__main_image }}" width = "50"></td>
             {% endif %}
         </tr>
         {% endfor %}
