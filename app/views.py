@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse
-from .models import Product, SupplierProduct, Image
-from django.db.models import Q
+from django.db.models import Q, OuterRef, Exists
+from django.db import connection
+from .models import Product, SupplierProduct, Image, Supplier
 
 
 def user_dispather(request):
@@ -34,7 +35,8 @@ def my_product(request):
     '''
     user = request.user
     if user.groups.filter(name='Suppliers').exists():
-        my_products = SupplierProduct.objects.all().filter(supplier__name=user).order_by('product'). \
+        my_products = SupplierProduct.objects.\
+            filter(supplier__name=user).order_by('product'). \
             values('product__name', 'product__product', 'product_price', 'availability', 'product__main_image')
         dataset = {'my_products': my_products}
         return render(request, 'app/my_product.html', dataset)
@@ -49,18 +51,17 @@ def suppliers(request):
     '''
     user = request.user
     if user.groups.filter(name='Suppliers').exists():
-        competitors_product = SupplierProduct.objects.all().filter(availability__exact='True'). \
-                                                            exclude(supplier__name=user)
-        my_products = SupplierProduct.objects.all().filter(supplier__name=user).order_by('product')
-
-        cheaper_products = []
-        for my in my_products:
-            for competitor in competitors_product:
-                if my.product == competitor.product and my.product_price >= competitor.product_price:
-                    cheaper_products.append(competitor)
-
-        products = Product.objects.all().order_by('product')
-        return render(request, 'app/suppliers.html', {'cheaper_products': cheaper_products, 'products': products})
+        cheaper_products = SupplierProduct.objects.annotate(
+            exist=Exists(SupplierProduct.objects.filter(
+                Q(supplier__name=user),
+                ~Q(supplier_id=OuterRef('supplier_id')),
+                product_id=OuterRef('product_id'),
+                product_price__gt = OuterRef('product_price')
+                )
+            )
+        ).filter(availability=True, exist=True).order_by('product', 'product_price'). \
+            values('product__name', 'product__product', 'supplier__name', 'product_price')
+        return render(request, 'app/suppliers.html', {'cheaper_products': cheaper_products})
     else:
         return HttpResponseNotFound('<h1>Forbidden.</h1><p>You don`t have permission to access</p>')
 
@@ -72,7 +73,8 @@ def buyer(request):
     '''
     user = request.user
     if user.groups.filter(name='Buyers').exists():
-         available_product = SupplierProduct.objects.filter(availability__exact='True').\
+         available_product = SupplierProduct.objects.\
+             filter(availability__exact='True').\
             order_by('product', 'product_price').\
             values('product__name', 'product__product', 'product_price', 'supplier__name', 'product__main_image')
          dataset = {'available_product': available_product}

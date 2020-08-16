@@ -56,9 +56,6 @@ class SupplierProductAdmin(admin.ModelAdmin):
             if old.supplier != obj.supplier or old.product != obj.product:
                 msg = _('The {name} already has a product with this vendor code "{code}". Try another')
                 self.message_user(request, format_html(msg, **msg_dict), level=messages.ERROR)
-            elif old.product_price == obj.product_price:
-        #         don`t save to database, save time consumption
-                self.message_user(request, _('Nothing have been changed'), level=messages.INFO)
             else:
                 obj.save()
 

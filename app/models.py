@@ -29,7 +29,7 @@ class Supplier(models.Model):
     '''
     All information about supplier are here
     '''
-    name = models.CharField('Provider name', default='', max_length=50)
+    name = models.CharField('Supplier name', default='', max_length=50)
     # telephone = models.CharField('Telephone', default=None, max_length=12)
     zip_code = models.CharField('zip code', default=None, max_length=6)
 
