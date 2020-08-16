@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse
 from django.db.models import Q, OuterRef, Exists
-from django.db import connection
+from django.core.exceptions import PermissionDenied
 from .models import Product, SupplierProduct, Image, Supplier
 
 
@@ -41,7 +41,7 @@ def my_product(request):
         dataset = {'my_products': my_products}
         return render(request, 'app/my_product.html', dataset)
     else:
-        return HttpResponseNotFound('<h1>Forbidden.</h1><p>You don`t have permission to access</p>')
+        raise PermissionDenied
 
 
 @login_required
@@ -64,7 +64,7 @@ def suppliers(request):
             values('product__name', 'product__product', 'supplier__name', 'product_price')
         return render(request, 'app/suppliers.html', {'cheaper_products': cheaper_products})
     else:
-        return HttpResponseNotFound('<h1>Forbidden.</h1><p>You don`t have permission to access</p>')
+        raise PermissionDenied
 
 
 @login_required
@@ -81,4 +81,4 @@ def buyer(request):
          dataset = {'available_product': available_product}
          return render(request, 'app/buyer.html', dataset)
     else:
-         return HttpResponseNotFound('<h1>Forbidden.</h1><p>You don`t have permission to access</p>')
+         raise PermissionDenied
