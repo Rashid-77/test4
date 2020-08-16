@@ -55,6 +55,7 @@ def suppliers(request):
             exist=Exists(SupplierProduct.objects.filter(
                 Q(supplier__name=user),
                 ~Q(supplier_id=OuterRef('supplier_id')),
+                availability=True,
                 product_id=OuterRef('product_id'),
                 product_price__gt = OuterRef('product_price')
                 )
