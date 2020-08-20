@@ -20,9 +20,9 @@ Provider`s page
         </tr>
         {% for i in cheaper_products %}
         <tr align="center">
-            <td>{{ i.product__name }}</td>
-            <td>{{ i.product__product }}</td>
-            <td>{{ i.product_price }}</td>
+            <td>{{ i.name }}</td>
+            <td>{{ i.vendor_id }}</td>
+            <td>{{ i.price }}</td>
             <td>{{ i.supplier__name }}</td>
         </tr>
         {% endfor %}
