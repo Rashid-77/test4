@@ -34,14 +34,17 @@ def my_product(request):
     This view makes a table of all products of currently logged in supplier user
     '''
     user = request.user
-    # if user.groups.filter(name='Suppliers').exists():
+    if user.groups.filter(name='Suppliers').exists():
     #     my_products = SupplierProduct.objects.\
     #         filter(supplier__name=user).order_by('product'). \
     #         values('product__name', 'product__product', 'product_price', 'availability', 'product__main_image')
-    #     dataset = {'my_products': my_products}
-    #     return render(request, 'app/my_product.html', dataset)
-    # else:
-    #     raise PermissionDenied
+
+        my_products = Product.objects.filter(supplier__name=user).order_by('vendor_id'). \
+            values('name', 'vendor_id', 'price', 'availability', 'main_image')
+        dataset = {'my_products': my_products}
+        return render(request, 'app/my_product.html', dataset)
+    else:
+        raise PermissionDenied
 
 
 @login_required
