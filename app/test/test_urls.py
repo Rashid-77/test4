@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from app.views import user_dispather, my_product, suppliers, buyer, login_view
+from app.views import user_dispather, my_product, suppliers, buyer
 
 
 class TestUrls(SimpleTestCase):
