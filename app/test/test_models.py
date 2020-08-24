@@ -2,7 +2,7 @@ from django.test import TestCase
 from app.models import Product, Image, Supplier
 
 
-class MyTestCase(TestCase):
+class TestModel(TestCase):
 
     def setUp(self):
         self.s = Supplier.objects.create(name='qwerty', zip_code='998877')
