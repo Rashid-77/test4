@@ -7,7 +7,6 @@ class Image(models.Model):
     Here is the other product images.
     """
     path = models.ImageField(default=None, blank=False)
-    order = models.PositiveIntegerField('order', default=0)
 
     def __str__(self):
         return '{0} {1}'.format(self.path, self.order)
